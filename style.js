@@ -25,8 +25,8 @@ function drawStars() {
 }
 drawStars();
 
-// --- FIREWORK ROCKET ---
-let rocket = { x: fCanvas.width/2, y: fCanvas.height, tY: fCanvas.height/2.5, active: true, speed: 6 };
+// --- FIREWORK LOGIC ---
+let rocket = { x: fCanvas.width/2, y: fCanvas.height, tY: fCanvas.height/2.2, active: true, speed: 7 };
 let particles = [];
 
 function explode(x, y) {
@@ -38,7 +38,7 @@ function explode(x, y) {
 function drawFirework() {
     fCtx.clearRect(0,0,fCanvas.width,fCanvas.height);
     if(rocket.active) {
-        fCtx.fillStyle = "white";
+        fCtx.fillStyle = "#f4c430";
         fCtx.beginPath(); fCtx.arc(rocket.x, rocket.y, 3, 0, Math.PI*2); fCtx.fill();
         rocket.y -= rocket.speed;
         if(rocket.y <= rocket.tY) { rocket.active = false; explode(rocket.x, rocket.y); reveal(); }
@@ -56,9 +56,11 @@ drawFirework();
 
 function reveal() {
     setTimeout(() => {
-        document.getElementById('intro-content').classList.add('visible-content');
+        const intro = document.getElementById('intro-content');
+        if(intro) intro.classList.add('visible-content');
     }, 400);
 }
+setTimeout(reveal, 4000); // Fail-safe reveal
 
 // --- NAVIGATION ---
 function goToScene(n) {
@@ -66,12 +68,13 @@ function goToScene(n) {
     document.getElementById(`scene-${n}`).classList.add('active');
     
     if (n !== 4) { audio.pause(); } // Stop music if leaving tape page
-    if (n === 7) startLoading();
-    if (n === 9) startTypewriter();
+
+    if(n === 7) startLoading();
+    if(n === 9) startTypewriter();
 }
 
 // --- MUSIC LOGIC ---
-let audio = document.getElementById('player-audio');
+let audio = document.getElementById('global-audio');
 
 function toggleMusic(src, el) {
     if(!audio.paused && audio.src.includes(src)) {
@@ -80,7 +83,7 @@ function toggleMusic(src, el) {
     } else {
         document.querySelectorAll('.cassette-container').forEach(c => c.classList.remove('playing'));
         audio.src = src;
-        audio.play();
+        audio.play().catch(e => console.log("Audio play needs user click"));
         el.classList.add('playing');
         startWave(el);
     }
@@ -93,11 +96,10 @@ function startWave(el) {
     function draw() {
         if(!el.classList.contains('playing')) return;
         ctxW.clearRect(0,0,cvs.width,cvs.height);
-        ctxW.strokeStyle = "#fff";
-        ctxW.lineWidth = 2;
+        ctxW.strokeStyle = "#fff"; ctxW.lineWidth = 2;
         ctxW.beginPath();
         for(let x=0; x<cvs.width; x++) {
-            let y = 12 + Math.sin(x*0.1 + offset)*6;
+            let y = 12 + Math.sin(x*0.1 + offset)*5;
             ctxW.lineTo(x, y);
         }
         ctxW.stroke();
@@ -107,11 +109,11 @@ function startWave(el) {
     draw();
 }
 
-// --- LOADING BAR ---
+// --- LOADING ---
 function startLoading() {
     let p = 0;
-    const bar = document.querySelector('.bar-fill');
-    const txt = document.getElementById('perc-val');
+    const bar = document.querySelector('.loading-bar-fill');
+    const txt = document.getElementById('perc');
     const inv = setInterval(() => {
         if(p >= 100) { 
             clearInterval(inv); 
@@ -127,7 +129,7 @@ function startLoading() {
 // --- TYPEWRITER ---
 function startTypewriter() {
     const text = "Happy New Year Anushka! May 2026 be kind, exciting, and full of opportunities 🌟";
-    const el = document.getElementById('typewriter-output');
+    const el = document.getElementById('type-text');
     el.innerHTML = "";
     let i = 0;
     function type() {
@@ -136,7 +138,7 @@ function startTypewriter() {
             i++; 
             setTimeout(type, 70); 
         } else { 
-            const rb = document.getElementById('restart-journey');
+            const rb = document.getElementById('restart');
             rb.style.opacity = "1"; 
             rb.style.pointerEvents = "all"; 
         }
