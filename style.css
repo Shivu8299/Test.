@@ -1,0 +1,97 @@
+/* --- RESET & GLOBAL --- */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'Quicksand', sans-serif; overflow: hidden; height: 100vh; width: 100vw; background: #000; }
+
+.dark-mode { background: #0a0a1a; color: white; }
+.light-mode { background: #FFF8E7; color: #4a4a4a; }
+.red-mode { background: #E63946; color: white; }
+
+/* SCENE MANAGEMENT */
+.scene { position: absolute; inset: 0; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; display: flex; flex-direction: column; align-items: center; }
+.scene.active { opacity: 1; pointer-events: all; z-index: 10; }
+.scrollable { overflow-y: auto; display: block; }
+
+/* --- SCENE 1: FIREWORK --- */
+#star-canvas, #firework-canvas { position: absolute; inset: 0; pointer-events: none; }
+.content-center { position: relative; z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
+.hidden-content { opacity: 0; transform: translateY(20px); transition: 1.5s; }
+.visible-content { opacity: 1; transform: translateY(0); }
+.year-title { font-family: 'Cinzel', serif; font-size: 5rem; background: linear-gradient(to bottom, #fff, #f4c430); -webkit-background-clip: text; color: transparent; margin: 10px 0; }
+.cat-box img { width: 100px; border: 2px solid gold; padding: 5px; }
+.text-btn { background: none; border: none; border-bottom: 2px solid gold; color: gold; font-family: 'Cinzel'; padding: 5px 0; cursor: pointer; margin-top: 20px; font-size: 0.9rem; letter-spacing: 2px; }
+
+/* --- SCENE 2: ENVELOPE (REPLICATED) --- */
+.envelope-wrapper { height: 100%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 50px; }
+.envelope-body { width: 320px; height: 200px; background: #c62828; border-radius: 0 0 10px 10px; position: relative; margin-bottom: 40px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+.envelope-flap { position: absolute; top: -100px; left: 0; width: 0; height: 0; border-left: 160px solid transparent; border-right: 160px solid transparent; border-bottom: 100px solid #e53935; z-index: 5; }
+.env-cat-corner { position: absolute; top: -140px; left: -10px; width: 90px; z-index: 20; transform: rotate(-5deg); }
+.sliding-card { position: absolute; bottom: 10px; left: 10px; width: 300px; background: white; border-radius: 8px; padding: 25px 15px; color: #333; transition: transform 2.5s ease; z-index: 2; }
+.active .sliding-card { transform: translateY(-150px); z-index: 6; }
+.fancy-header { font-family: 'Dancing Script'; font-size: 1.8rem; color: #e63946; margin-bottom: 15px; }
+.bbq-zone { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 15px; }
+.bbq-emoji { font-size: 3rem; }
+.strawberry-cat { width: 45px; }
+.fancy-nav-btn { background: white; color: #E63946; border: none; padding: 12px 35px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+
+/* --- SCENE 3: LIST --- */
+.bucket-container { background: white; width: 85%; padding: 40px 25px; border-radius: 15px; margin-top: 80px; text-align: center; }
+.bucket-subtitle { font-family: 'Dancing Script'; font-size: 2.2rem; color: #E63946; margin-bottom: 30px; }
+.check-item { display: flex; align-items: center; margin-bottom: 15px; font-size: 0.9rem; font-weight: 600; text-align: left; }
+.box { width: 20px; height: 20px; border: 2px solid #E63946; border-radius: 4px; margin-right: 12px; flex-shrink: 0; }
+.go-btn-large { background: #E63946; color: white; width: 100%; padding: 15px; border-radius: 50px; border: none; font-weight: 800; font-size: 1.1rem; margin-top: 25px; }
+
+/* --- SCENE 4: CASSETTES --- */
+.music-header { padding: 40px 20px; text-align: center; }
+.cassette-container { width: 330px; height: 180px; border-radius: 12px; margin: 20px auto; padding: 15px; position: relative; box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+.red-tape { background: #c0392b; }
+.pink-tape { background: #ad1457; }
+.cassette-label { background: #ecf0f1; height: 100px; border-radius: 5px; display: flex; align-items: center; padding: 10px; color: #333; }
+.art-disk { width: 70px; height: 70px; border-radius: 50%; border: 3px solid #333; object-fit: cover; margin-right: 15px; }
+.song-name { font-family: 'Dancing Script'; font-size: 1.4rem; font-weight: bold; }
+.tape-gears { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 0 40px; }
+.gear-wheel { width: 35px; height: 35px; background: white; border-radius: 50%; border: 3px solid #333; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+.playing .gear-wheel { animation: spin 2s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.wave-box { width: 90px; height: 25px; background: rgba(0,0,0,0.1); border-radius: 5px; overflow: hidden; }
+.fixed-next-btn { position: fixed; bottom: 20px; right: 20px; background: #E63946; color: white; border: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; }
+
+/* --- SCENE 5: STICKY NOTES --- */
+.note-wrapper { perspective: 1000px; width: 280px; height: 320px; margin: 30px auto; }
+.note-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d; }
+.flipped .note-inner { transform: rotateY(180deg); }
+.note-front, .note-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.note-back { transform: rotateY(180deg); background: white; }
+.note-back img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+.pink-note { background: #ffcdd2; }
+.yellow-note { background: #fff9c4; }
+.blue-note { background: #e1f5fe; }
+.note-front p { font-family: 'Dancing Script'; font-size: 1.6rem; text-align: center; color: #333; }
+.large-fancy-btn { background: #e63946; color: white; padding: 18px 50px; border-radius: 50px; border: none; font-weight: 800; font-size: 1.2rem; margin-top: 20px; box-shadow: 0 8px 15px rgba(230,57,70,0.3); }
+
+/* --- SCENE 6: FERRERO --- */
+.ready-box { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
+.img-frame-small img { width: 140px; margin-bottom: 20px; }
+.fancy-ready-text { font-family: 'Dancing Script'; font-size: 3.5rem; }
+.ignite-btn { border: 2px solid gold; color: gold; background: transparent; padding: 15px 40px; border-radius: 50px; font-weight: bold; margin-top: 30px; }
+
+/* --- SCENE 7: LOADING --- */
+.bar-container { width: 250px; height: 10px; background: #ddd; border-radius: 10px; margin: 20px 0; overflow: hidden; }
+.bar-fill { height: 100%; width: 0%; background: gold; }
+
+/* --- SCENE 8: NOTE --- */
+.note-card-aesthetic { background: white; width: 85%; border-radius: 15px; overflow: hidden; margin-top: 60px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.header-img { width: 100%; height: 200px; object-fit: cover; }
+.card-body { padding: 30px; text-align: left; }
+.hey-text { font-family: 'Dancing Script'; color: gold; font-size: 1.4rem; }
+.last-note-title { font-family: 'Playfair Display'; font-size: 2rem; margin: 10px 0; }
+.msg-text { font-size: 0.9rem; line-height: 1.6; color: #666; }
+.seal-btn-aesthetic { background: #333; color: white; width: 100%; padding: 15px; border-radius: 50px; border: none; font-weight: bold; margin-top: 20px; }
+
+/* --- SCENE 9: SHIELD --- */
+.final-shield-bg { background: radial-gradient(circle, #fff9e7, #ffe082); }
+.shield-container { text-align: center; width: 85%; }
+.sealed-text { font-family: 'Cinzel'; font-size: 3rem; color: #b8860b; margin: 20px 0; }
+.type-box { min-height: 120px; background: white; border-radius: 15px; display: flex; align-items: center; justify-content: center; padding: 20px; }
+#typewriter-output { font-family: 'Dancing Script'; font-size: 2rem; font-weight: bold; }
+.final-restart-btn { border: 2px solid #b8860b; color: #b8860b; background: transparent; padding: 12px 35px; border-radius: 50px; margin-top: 30px; opacity: 0; pointer-events: none; transition: 1s; }
+.bottom-spacer { height: 100px; width: 100%; }
